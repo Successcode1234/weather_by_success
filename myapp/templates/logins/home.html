@@ -1,0 +1,268 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Weather - by Gadix's</title>
+<link rel="stylesheet" href="{% static 'styles/home.css' %}">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Condensed:wght@100;200;300;400;500;600;700&family=Iceberg&family=Inter:wght@100;400;700&family=Irish+Grover&display=swap" rel="stylesheet">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js"></script>
+<script src="https://unpkg.com/lottie-web@latest/build/player/lottie.min.js"></script>
+</head>
+<body>
+  <div class="alert">
+    {% if messages %}
+      {% for message in messages %}
+        <div class="alert_message {{ message.tags }}">{{ message }}</div>
+      {% endfor %}
+    {% endif %}
+  </div>
+
+  <!-- loader -->
+  <div class="loader_parent">
+    <div class="loader_div">
+      <div class="loader_main"></div>
+      <div class="percentage_done">0%</div>
+    </div>
+  </div>
+
+  <!-- welcome screen -->
+  <div class="welcome">
+    <div class="welcome_icon_div">
+      <div class="welcome_icon"></div>
+    </div>
+    <div class="wlc_text">
+      <h2>Welcome, {{ user.first_name }} 👋</h2>
+      <!-- <h2>Thanks for being the {{ user.id }} user to login🎉</h2> -->
+      <p>Glad to have you here! This is a weather web app built by Gadix's. 🌤️</p>
+      <p>Click "Continue" and allow location access so we can provide accurate weather info for your area.</p>
+      <button class="continue_btn">Continue</button>
+    </div>
+  </div>
+
+  <!-- location choosing -->
+  <div class="parent_location_choosing">
+    <h2>Get location</h2>
+
+    <div class="auto_locat">
+      <form action="" method="post" class="locat_form">
+        {% csrf_token %}
+        <input type="hidden" name="form_type" value="auto">
+        <h2>Automatically</h2>
+        <p>Click the button below to allow location access.</p>
+        <button type="submit" class="locat_btn">Allow location access</button>
+      </form>
+    </div>
+
+    <div class="or">or</div>
+
+    <div class="manual_locat">
+      <!-- <form action="" method="post" class="locat_form">
+        {% csrf_token %}
+        <input type="hidden" name="form_type" value="manual">
+        <h2>Manually</h2>
+        <input type="text" name="location" placeholder="Enter your city or town" class="locat_input" required>
+        <button type="submit" class="locat_btn">Submit</button>
+      </form> -->
+      <div class="locat_form">
+        <h2>Manually</h2>
+        <input type="text" name="location" placeholder="Enter your city or town" class="locat_input" required>
+        <button class="locat_btn">Submit</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- alternative choosing if location available -->
+  <div class="alt_chose">
+    <!-- start -->
+    <h2>Your previous location is:</h2>
+    <div class="prev_location">{{ user.location }}</div>
+    <p>would you like to use old location or choose a new one.</p>
+
+    <div class="alt_buttons">
+      <form action="" method="post" class="locat_form">
+        {% csrf_token %}
+        <input type="hidden" name="form_type" value="use_prev">
+        <button type="submit" class="locat_btn_previous">Use previous location</button>
+      </form>
+
+      <div class="new_">
+        <button class="new_local_btn">Choose new location</button>
+      </div>
+      <!-- <form action="" method="post" class="locat_form">
+        {% csrf_token %}
+        <input type="hidden" name="form_type" value="new_locat">
+        <button type="submit" class="locat_btn">Choose new location</button>
+      </form> -->
+    </div>
+    <!-- end -->
+  </div>
+
+  <script src="{% static 'js/home.js' %}"></script>
+
+  <script>
+  // Loader Lottie
+  lottie.loadAnimation({
+    container: document.querySelector('.loader_main'),
+    renderer: 'svg',
+    loop: true,
+    autoplay: true,
+    path: "{% static 'json_lottie/loader2.json' %}" 
+  });
+
+  // Welcome Icon Lottie
+  lottie.loadAnimation({
+    container: document.querySelector('.welcome_icon'),
+    renderer: 'svg',
+    loop: true,
+    autoplay: true,
+    path: "{% static 'json_lottie/hello.json' %}" 
+  });
+  </script>
+
+  <script>
+  {% if messages %}
+      const alertDiv = document.querySelector('.alert');  
+      alertDiv.style.visibility = 'visible';
+      setTimeout(() => {
+        alertDiv.style.visibility = 'hidden';
+      }, 5000);
+  {% endif %} 
+  </script>
+
+  <script>
+  document.querySelectorAll('.locat_btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      const autoInput = document.querySelector('input[name="form_type"][value="auto"]');
+      if (autoInput && btn.closest('.auto_locat')) {
+        e.preventDefault();
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition((position) => {
+            const latitude = position.coords.latitude;
+            const longitude = position.coords.longitude;
+            
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '';
+            form.innerHTML = `
+              <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+              <input type="hidden" name="form_type" value="auto">
+              <input type="hidden" name="latitude" value="${latitude}">
+              <input type="hidden" name="longitude" value="${longitude}">
+            `;
+            document.body.appendChild(form);
+            form.submit();
+          }, (error) => {
+            alert('Error getting location. Please allow location access or enter manually.');
+          });
+        } else {
+          alert('Geolocation not supported by this browser.');
+        }
+      }
+    });
+  });
+  </script>
+
+  <!-- ✅ Fixed: removed nested <script> and handled 'None' properly -->
+  <script>
+  const rawUserLocation = "{{ user.location|default_if_none:''|escapejs }}";
+  const userLocation = rawUserLocation === "None" ? "" : rawUserLocation;
+
+  const alt_chose = document.querySelector('.alt_chose');
+  const parent_location_choosing = document.querySelector('.parent_location_choosing');
+
+  if (userLocation && userLocation.trim() !== "") {
+    // alt_chose.style.display = 'flex';
+    // alt_chose.style.visibility = 'visible';
+    // parent_location_choosing.style.display = 'none';
+    // parent_location_choosing.style.visibility = 'hidden';
+    let welcome = document.querySelector('.welcome');
+    let alt_chose = document.querySelector('.alt_chose');
+    let new_local_btn = document.querySelector('.new_local_btn');
+
+    document.querySelector('.welcome').style.display = 'none';
+    document.querySelector('.alt_chose').style.display = 'flex';
+
+    document.querySelector('.welcome').style.visibility = 'hidden';
+    document.querySelector('.alt_chose').style.visibility = 'visible';
+
+
+    console.log("✅ Previous location found:", userLocation);
+  } else {
+    // alt_chose.style.display = 'none';
+    // alt_chose.style.visibility = 'hidden';
+    // parent_location_choosing.style.display = 'flex';
+    // parent_location_choosing.style.visibility = 'visible';
+    console.log("⚠️ No previous location saved.");
+  }
+
+  document.querySelector('.new_local_btn').addEventListener('click', () => {
+    document.querySelector('.alt_chose').style.display = 'none';
+    document.querySelector('.welcome').style.display = 'flex';
+
+    document.querySelector('.alt_chose').style.visibility = 'hidden';
+    document.querySelector('.welcome').style.visibility = 'visible';
+  });
+  </script>
+  <!-- script for manuall location submit -->
+   <script>
+    let locat_btn = document.querySelectorAll('.locat_btn')[1];
+    // test actuall locaion url "http://api.geonames.org/searchJSON?q=umuahia&maxRows=1&username=username"
+    locat_btn.addEventListener('click', () => {
+      let locat_input = document.querySelector('.locat_input').value;
+      if (locat_input.trim() === "") {
+        alert("Please enter a location.");
+        return;
+      }
+
+      
+      // const form = document.createElement('form');
+      // form.method = 'POST';
+      // form.action = '';
+      // form.innerHTML = `
+      //   <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+      //   <input type="hidden" name="form_type" value="manual">
+      //   <input type="hidden" name="location" value="${locat_input}">
+      // `;
+      // document.body.appendChild(form);
+      // form.submit();
+      validatelocation(locat_input);
+    });
+      
+
+    async function validatelocation(location){
+      let username_main = "success1"; // Replace with your GeoNames username
+      let url = `http://api.geonames.org/searchJSON?q=${location}&maxRows=1&username=${username_main}`;
+      let response = await fetch(url);
+      let data = await response.json();
+        console.log(data);
+        try{
+          if(data.totalResultsCount > 0){
+            // location is valid, submit the form
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '';
+            form.innerHTML = `
+              <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+              <input type="hidden" name="form_type" value="manual">
+              <input type="hidden" name="location" value="${data.geonames[0].name}">
+            `;
+            document.body.appendChild(form);
+            form.submit();
+            console.log("Valid location:", data.geonames[0].name);
+          }else{
+            alert("Invalid location. Please enter a valid city or town.");
+          }
+        }
+        catch(err){
+          alert("Error validating location. Please try again.");
+          console.log(err);
+        }
+      }
+   </script>
+</body>
+</html>

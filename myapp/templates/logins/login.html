@@ -1,0 +1,86 @@
+{% load static %}
+{% load socialaccount %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Weather App by Gadix's</title>
+  <link rel="stylesheet" href="{% static 'styles/login.css' %}">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+</head>
+<body>
+  <div class="mobile">
+    <h2 class="app-title">Weather App by Gadix's</h2>
+    <p class="subtitle">Check forecasts, stay prepared 🌦️</p>
+
+    {% if messages %}
+      <div class="messages">
+        {% for message in messages %}
+          <p>{{ message }}</p>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <div class="tab-buttons">
+      <button id="loginTab" class="active">Login</button>
+      <button id="signupTab">Sign Up</button>
+    </div>
+
+    <!-- Login form -->
+    <form id="loginForm" class="active" method="POST" action="">
+      {% csrf_token %}
+      <input type="hidden" name="form_type" value="login">
+
+      <label>Email</label>
+      <input type="email" name="email" placeholder="Enter your email" required>
+
+      <label>Password</label>
+      <input type="password" name="password" placeholder="Enter your password" required autocomplete="new-password">
+
+      <button type="submit" class="action-btn">Login</button>
+
+      <div class="social-login">
+        <p>Or login with</p>
+        <div class="social-buttons">
+        <a href="{% provider_login_url 'google' %}" class="btn btn-danger"><button type="button" class="google">  Google 
+            <img src="{% static 'images/assets/google.png' %}" alt="google icon" id="google_icon">
+          </button>
+          </a>  
+
+
+          <button type="button" class="facebook" >Facebook 
+            <img src="{% static 'images/assets/facebook.png' %}" alt="facebook icon" id="facebook_icon">
+          </button>
+        </div>
+      </div>
+    </form>
+
+    <!-- Signup form -->
+    <form id="signupForm" method="POST" action="">
+      {% csrf_token %}
+      <input type="hidden" name="form_type" value="signup">
+
+      <label>First Name</label>
+      <input type="text" name="first_name" placeholder="John" required>
+
+      <label>Last Name</label>
+      <input type="text" name="last_name" placeholder="Doe" required>
+
+      <label>Email</label>
+      <input type="email" name="email" placeholder="Enter your email" required>
+
+      <label>Password</label>
+      <input type="password" name="password" placeholder="Enter your password" required>
+
+      <label>Confirm Password</label>
+      <input type="password" name="confirm_password" placeholder="Confirm password" required>
+
+      <button type="submit" class="action-btn">Register</button>
+    </form>
+  </div>
+  <script src="{% static 'js/login.js' %}"></script>
+</body>
+</html>

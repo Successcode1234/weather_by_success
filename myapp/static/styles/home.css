@@ -1,0 +1,350 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* body {
+ 
+    background: linear-gradient(180deg, #0f2027, #66a6ff, #89f7fe);
+} */
+/* Whole screen centered */
+body {
+  /* background: linear-gradient(18deg, #0f2027, #66a6ff, #66a6ff,#66a6ff); */
+  background-color: var(--body-bg-color);
+  font-family: "Poppins", sans-serif;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  color: #fff;
+}
+:root {
+  --primary-color: #66a6ff;
+  --secondary-color: #4693ff;
+  --tertiary-color: #89f7fe;
+  --body-bg-color: rgb(230, 230, 230);
+}
+
+.loader_div {
+  height: fit-content;
+  width: 90%;
+  max-width: 400px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.percentage_done {
+  font-family: "Iceberg", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.loader_parent {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100%;
+  background-color: rgb(255, 255, 255);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+  overflow: hidden;
+}
+
+.welcome {
+  width: 90%;
+  max-width: 400px;
+  height: 70vh;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #2a5298;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  border-radius: 15px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  /* overflow: hidden; */
+  padding: 20px;
+}
+
+.welcome_icon_div {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: -50px;
+}
+
+.welcome_icon {
+  height: 120px;
+  width: 120px;
+  border-radius: 50%;
+  background-color: var(--secondary-color);
+  border: 3px solid var(--body-bg-color);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  overflow: hidden;
+}
+
+.wlc_text {
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+  margin-top: 20px;
+  color: white;
+  opacity: 1;
+}
+
+.wlc_text h2, .wlc_text p, .continue_btn {
+  opacity: 0;
+}
+
+.wlc_text h2 {
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+}
+
+.wlc_text p {
+  font-size: 1rem;
+  margin: 5px 0;
+}
+
+.continue_btn {
+  margin-top: 15px;
+  padding: 10px 25px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 10px;
+  background: white;
+  color: #333;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.continue_btn:hover {
+  background: #f2f2f2;
+}
+.parent_location_choosing{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    height: 70vh;
+    max-width: 400px;
+    background-color: #2a5298;
+    display: flex;
+    visibility: hidden;
+    justify-content: center;
+    align-items: center;
+    flex-direction:column ;
+}
+.auto_locat,.manual_locat{
+    width: 80%;
+    height: 30%;
+    background-color: rgb(212, 212, 212);
+    margin: 10px 0;
+    border-radius: 10px;
+}
+.or{
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--body-bg-color);
+    height: 10%;
+    font-family: "Iceberg", sans-serif;
+}
+.manual_locat{
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    flex-direction: column;
+}
+.locat_form{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-direction: column;
+}
+.auto_locat{
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-direction: column;
+}
+.locat_input{
+  width: 80%;
+  height: 40px;
+  border: solid 2px #000;
+  border-top-color: transparent;
+  border-left-color: transparent;
+  border-right-color: transparent;
+  outline: none;
+}
+.locat_btn{
+  width: 50%;
+  height: 35px;
+  border: none;
+  border-radius: 5px;
+  background-color: var(--primary-color);
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+}
+.locat_btn:hover{
+background-color: rgb(212, 212, 212);
+border: none;
+}
+.locat_btn:active{
+  transform: scale(0.98);
+  color: gray;
+}
+.alert{
+  width: 100%;
+  height: 50px;
+  background-color: rgb(139, 139, 139);
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 20;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  visibility: hidden;
+}
+.locat_form p{
+  font-size: 1rem;
+  text-align: center;
+  font-family: "Iceberg", sans-serif;
+  color:gray;
+}
+.auto_locat p{
+    font-size: 1rem;
+  text-align: center;
+  font-family: "Iceberg", sans-serif;
+  color:gray;
+}
+.alt_chose{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    height: 70vh;
+    max-width: 400px;
+    background-color: #2a5298;
+    display: flex;
+    visibility: hidden;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    flex-direction:column ;
+}
+/* start 1 */
+
+
+/* Main card */
+.alt_chose {
+  width: 100%;
+  max-width: 380px;
+  background: rgba(37, 77, 133, 0.63);
+  border: 1px solid rgba(255, 255, 255, 0.767);
+  border-radius: 16px;
+  -webkit-backdrop-filter: blur(120px);
+  backdrop-filter: blur(120px);
+  text-align: center;
+  padding: 25px 20px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  animation: fadeIn 0.6s ease;
+}
+
+/* Fade in animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Heading */
+.alt_chose h2 {
+  font-size: 1.3rem;
+  margin-bottom: 10px;
+  color: #00e6ff;
+}
+
+/* Previous location bubble */
+.prev_location {
+  display: inline-block;
+  background: rgba(0, 230, 255, 0.15);
+  border: 1px solid rgba(0, 230, 255, 0.3);
+  border-radius: 12px;
+  padding: 10px 15px;
+  font-weight: 600;
+  font-size: 1rem;
+  color: #00e6ff;
+  margin-bottom: 12px;
+}
+
+/* Paragraph */
+.alt_chose p {
+  font-size: 0.9rem;
+  color: #d6e3e6;
+  margin-bottom: 20px;
+  line-height: 1.4;
+}
+
+/* Buttons wrapper - stacked vertically */
+.alt_buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Common button styles */
+.alt_buttons button {
+  width: 100%;
+  padding: 12px 0;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 10px;
+  cursor: pointer;
+  border: none;
+  transition: all 0.3s ease;
+}
+
+/* “Use previous” button */
+.locat_btn_previous {
+  background-color: #00e6b8;
+  color: #000;
+}
+
+.locat_btn_previous:active {
+  background-color: #00c79a;
+  transform: scale(0.98);
+}
+
+/* “Choose new location” button */
+.new_local_btn {
+  background: transparent;
+  border: 1px solid #00e6ff;
+  color: #00e6ff;
+}
+
+.new_local_btn:active {
+  background: #00e6ff;
+  color: #000;
+  transform: scale(0.98);
+}
+
+
+/* end */
+.alert_message{
+  color:rgb(61, 44, 44);
+}

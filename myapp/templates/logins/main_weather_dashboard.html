@@ -1,0 +1,132 @@
+{% load static %}
+{{ data|json_script:"weather-data" }}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather app</title>
+    <link rel="stylesheet" href="{% static 'styles/weather_dashboard.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&family=Iceberg&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Irish+Grover&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- this is the weather dash board<br>
+    user - {{ user.first_name|default:"No name" }} welcome<br>
+    location - {{ user.location }} <br>
+    Authenticated: {{ user.is_authenticated }} -->
+<div class="mobile_view">
+    <div class="parent">
+    <div class="top_section">
+        <div class="local_date">
+            <div class="local">
+                <div class="location_icon">
+                    <img src="{% static 'images/assets/location_icon.png' %}" alt="location icon" class="location_png"/>
+                </div>
+                <div class="real_location">LOCATION</div>
+            </div>
+            <div class="date"><span>Today,oct 118 5:10</span></div>
+        </div>
+        <div class="user_profile_add">
+            <div class="add_location">
+                <img src="{% static 'images/assets/more.png' %}" alt="add more" title="add more location" class="addmore_png"/>
+            </div>
+            <div class="user_profile">
+                <div class="profile"></div>
+            </div>
+        </div>
+    </div>
+    <div class="mid_section">
+        <div class="tem">
+            <div class="temp_value"><span> 77&#176;C </span></div>
+            <div class="max_min">
+                <div class="max"><img src="{% static 'images/assets/arrow.png' %}" alt="arrow" class="max_arrow"><span>12</span></div>
+                <div class="min"><img src="{% static 'images/assets/arrow.png' %}" alt="arrow" class="min_arrow"><span>12</span></div>
+            </div>
+            
+        </div>
+        <div class="condition">
+            <div class="condition_type"> <h2>it's sunny</h2></div>
+            <div class="condition_icon"><img src="{% static 'images/assets/sun.png' %}" alt="icon" class='visual_condition_rep'></div>
+        </div>
+    </div>
+    <div class="bottom_section">
+        <div class="full_condition"></div>
+    </div>
+    </div>
+</div>
+<!-- data script -->
+
+<script>
+    // load json scrips for js from my server side django
+    const weatherData = JSON.parse(document.getElementById('weather-data').textContent);
+    console.log("Weather Data from Django:", weatherData);
+    // console.log(weatherData.name)
+
+
+    // location
+    let real_location = document.querySelector('.real_location');
+    // --
+    document.querySelector('.real_location').textContent = weatherData.name;
+    document.querySelector('.real_location').style.fontWeight = "600";
+    document.querySelector('.real_location').style.letterSpacing = "1.2px";
+    document.querySelector('.real_location').style.fontSize = "1.2rem";
+
+
+    // temp value
+    let temp_value = document.querySelector('.temp_value span');
+    let max = document.querySelector('.max span');
+    let min = document.querySelector('.max span');
+
+    // Convert Kelvin → Celsius
+    let tempC = Math.round(weatherData.main.temp - 273.15);
+
+    // Update only the span’s content
+    temp_value.textContent = `${tempC}°C`;
+
+    // max and min temp
+    let max_temp = Math.round(weatherData.main.temp_max - 273.15);
+    let min_temp = Math.round(weatherData.main.temp_min - 273.15);
+    max.textContent = `${max_temp}`;
+    min.textContent = `${min_temp}`;
+
+    // condithion type and icon
+    let condition_type = document.querySelector('.condition_type h2');
+    let condition_icon = document.querySelector('.visual_condition_rep');
+    condition_type.textContent = weatherData.weather[0].description;
+    // set icon based on weather condition
+    let weatherCondition_icon_code = weatherData.weather[0].icon
+    let icon_url = `https://openweathermap.org/img/wn/${weatherCondition_icon_code}@2x.png`
+    document.querySelector('.visual_condition_rep').setAttribute('src', icon_url);
+
+    // setting date
+    let dateElement = document.querySelector('.date span');
+    let currentDate = new Date();
+    let options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    let formattedDate = currentDate.toLocaleDateString(undefined, options);
+    dateElement.textContent = formattedDate;
+
+    // prfile pic adding
+    let profileDiv = document.querySelector('.profile');
+    
+//---------------------
+const userHasProfilePic = {{ user.profile_pic_url|yesno:"true,false" }};
+    const profilePicUrl = "{{ user.profile_pic_url|default:'' }}";
+
+    if (userHasProfilePic && profilePicUrl !== '') {
+        console.log('Profile pic URL found:', profilePicUrl);
+        document.querySelector('.profile').innerHTML = `
+            <img src="${profilePicUrl}" alt="Google profile picture" style="width:45px; height:45px; border-radius:50%;">
+        `;
+    } else {
+        console.log('No profile pic URL found');
+    }
+//-------------------
+    
+     
+</script>
+<script src="{% static 'js/weather_dashboard.js' %}"></script>
+</body>
+</html>
